@@ -1,20 +1,21 @@
 'use client'
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "../context/AuthContext";
-import { useEffect, useState } from "react";
 import addData from "@/firebase/firestore/addData";
 import getData from "@/firebase/firestore/getData";
 import { DocumentData, DocumentSnapshot } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function Page() {
     const { user } = useAuthContext()
     const router = useRouter()
     const [data, setData] = useState<DocumentSnapshot<DocumentData, DocumentData> | null>();
     const [userNumber, setUserNumber] = useState(-1);
+    const user_id = user?.uid ?? ""
 
     useEffect(() => {
         if (user == null) router.push("/")
-        getData('users', 'user-id').then(
+        getData('users', user_id).then(
             ({ result, error }) => {
                 if (error) {
                     return console.log(error)
@@ -31,7 +32,7 @@ export default function Page() {
         const data = {
             number: Math.floor(Math.random() * 100)
         }
-        const { result, error } = await addData('users', 'user-id', data)
+        const { result, error } = await addData('users', user_id, data)
 
         if (error) {
             return console.log(error)
