@@ -1,3 +1,4 @@
+'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
     onAuthStateChanged,
@@ -8,7 +9,7 @@ import firebase_app from '@/firebase/config';
 
 const auth = getAuth(firebase_app);
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext<{ user: User | null }>({ user: null });
 
 export const useAuthContext = () => useContext(AuthContext);
 
